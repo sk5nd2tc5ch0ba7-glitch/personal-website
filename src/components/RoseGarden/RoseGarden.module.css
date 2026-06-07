@@ -1,0 +1,276 @@
+/* 拉高制造滚动距离 → 红线照片随滚动一边画一边掉 */
+.garden {
+  position: relative;
+  width: 100%;
+  height: 220vh;
+  background: var(--color-bg-light);
+  color: var(--color-text-dark);
+}
+
+/* sticky 舞台：钉住一屏，承载底图 + 代码雨 + 照片 + 文字 */
+.garden__stage {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  cursor: none;
+}
+
+/* 细光圈：跟随鼠标的极简描边圆环，JS 驱动位移 */
+.garden__cursor {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 34px;
+  height: 34px;
+  margin: 0;
+  border: 1px solid rgba(168, 58, 60, 0.7);
+  border-radius: 50%;
+  z-index: 6;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  will-change: transform, opacity;
+}
+
+/* 圆心一个小点，强化"瞄准"感 */
+.garden__cursor::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 3px;
+  height: 3px;
+  margin: -1.5px 0 0 -1.5px;
+  border-radius: 50%;
+  background: rgba(168, 58, 60, 0.85);
+}
+
+/* 顶部羽化：让上方 Hero 深色丝滑渗入，消除硬切 */
+.garden__stage::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: clamp(120px, 18vh, 220px);
+  pointer-events: none;
+  z-index: 5;
+  background: linear-gradient(
+    to bottom,
+    var(--color-bg-hero) 0%,
+    rgba(13, 13, 13, 0.35) 28%,
+    rgba(245, 243, 240, 0) 100%
+  );
+}
+
+/* 底图：废墟玫瑰，铺满整屏 */
+.garden__bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  z-index: 0;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* 代码雨画布：压在底图上、文字与照片下 */
+.garden__canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* === 顶部垂落照片 === */
+.garden__pendants {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.pendant {
+  position: absolute;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transform-origin: top center;
+  will-change: transform, opacity;
+}
+
+/* 红线 */
+.pendant__line {
+  width: 1px;
+  background: linear-gradient(
+    to bottom,
+    rgba(168, 58, 60, 0.15),
+    rgba(168, 58, 60, 0.7)
+  );
+}
+
+/* 照片相框：白边 + 阴影，承载真图 */
+.pendant__photo {
+  aspect-ratio: 3 / 4;
+  background: #fefdfb;
+  border: 3px solid #fefdfb;
+  box-shadow: 0 6px 18px rgba(40, 36, 32, 0.22);
+  overflow: hidden;
+}
+
+.pendant__photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+/* 文字层：参照效果图，偏上居中 */
+.garden__body {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 4;
+  text-align: center;
+  max-width: 720px;
+  width: 100%;
+  padding: clamp(16vh, 20vh, 24vh) clamp(1.5rem, 5vw, 3rem) 0;
+  pointer-events: none;
+}
+
+.garden__cn {
+  font-family: var(--font-serif);
+  font-size: clamp(1.5rem, 3vw, 2.6rem);
+  font-weight: 500;
+  line-height: 1.85;
+  letter-spacing: 0.12em;
+  color: #2b2723;
+}
+
+.garden__accent {
+  color: var(--color-accent-rose);
+  font-weight: 600;
+}
+
+.garden__en {
+  margin-top: clamp(1.4rem, 3vh, 2.2rem);
+  font-family: var(--font-mono);
+  font-size: clamp(0.6rem, 0.85vw, 0.78rem);
+  font-weight: 400;
+  line-height: 2.1;
+  letter-spacing: 0.3em;
+  color: rgba(43, 39, 35, 0.45);
+  text-indent: 0.3em;
+}
+
+/* === 纯白 outro：拉开大段留白的桥接整页 === */
+.outro {
+  position: relative;
+  width: 100%;
+  min-height: 130vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-bg-light);
+  color: var(--color-text-dark);
+  overflow: hidden;
+}
+
+/* 灰点阵：纯 CSS radial-gradient 平铺，填补空白不抢戏 */
+.outro::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background-image: radial-gradient(
+    rgba(43, 39, 35, 0.16) 1.4px,
+    transparent 1.5px
+  );
+  background-size: 26px 26px;
+  background-position: center;
+  /* 中心淡出，让文字区干净，边缘点阵更密的呼吸感 */
+  -webkit-mask-image: radial-gradient(
+    ellipse 60% 50% at center,
+    transparent 0%,
+    rgba(0, 0, 0, 0.4) 45%,
+    #000 80%
+  );
+  mask-image: radial-gradient(
+    ellipse 60% 50% at center,
+    transparent 0%,
+    rgba(0, 0, 0, 0.4) 45%,
+    #000 80%
+  );
+  pointer-events: none;
+}
+
+/* 顶部羽化：从花园浅底丝滑接住，避免与点阵硬切 */
+.outro::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: clamp(80px, 14vh, 180px);
+  z-index: 1;
+  background: linear-gradient(
+    to bottom,
+    var(--color-bg-light) 0%,
+    rgba(245, 243, 240, 0) 100%
+  );
+  pointer-events: none;
+}
+
+.outro__cn {
+  position: relative;
+  z-index: 2;
+  font-family: var(--font-serif);
+  font-size: clamp(2rem, 5vw, 4rem);
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  line-height: 1.6;
+  color: #2b2723;
+  text-indent: 0.14em;
+}
+
+.outro__en {
+  position: relative;
+  z-index: 2;
+  margin-top: clamp(1.2rem, 3vh, 2rem);
+  font-family: var(--font-mono);
+  font-size: clamp(0.62rem, 0.9vw, 0.8rem);
+  font-weight: 400;
+  letter-spacing: 0.42em;
+  color: rgba(43, 39, 35, 0.4);
+  text-indent: 0.42em;
+}
+
+/* === 响应式 === */
+@media (max-width: 768px) {
+  .garden {
+    height: 200vh;
+  }
+
+  .garden__body {
+    padding-top: 14vh;
+  }
+
+  .outro {
+    min-height: 100vh;
+  }
+
+  .outro::before {
+    background-size: 20px 20px;
+  }
+}

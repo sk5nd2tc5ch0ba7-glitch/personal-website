@@ -1,0 +1,346 @@
+.hero {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  min-height: 600px;
+  display: flex;
+  align-items: stretch;
+  overflow: hidden;
+  background: var(--color-bg-hero);
+}
+
+/* 背景图 */
+.hero__bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.hero__bg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  opacity: 1;
+  filter: brightness(0.82) contrast(1.18) saturate(1.05);
+}
+
+.hero__bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    100deg,
+    rgba(0, 0, 0, 0.95) 0%,
+    rgba(0, 0, 0, 0.55) 35%,
+    rgba(5, 5, 5, 0.25) 55%,
+    rgba(0, 0, 0, 0.6) 100%
+  );
+}
+
+/* 底部加一层暗角，让黑色更沉 */
+.hero__bg::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      120% 90% at 50% 0%,
+      transparent 55%,
+      rgba(0, 0, 0, 0.5) 100%
+    ),
+    linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.4) 0%,
+      transparent 25%,
+      transparent 70%,
+      rgba(0, 0, 0, 0.85) 100%
+    );
+}
+
+/* 内容层 */
+.hero__content {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: clamp(2rem, 4vw, 3.5rem) clamp(2rem, 5vw, 5rem);
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-rows: auto 1fr auto;
+  height: 100%;
+}
+
+/* 左上：站点标识 */
+.hero__brand {
+  grid-column: 1;
+  grid-row: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.hero__brand-name {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.25em;
+}
+
+.hero__brand-tagline {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--color-text-muted);
+  letter-spacing: 0.18em;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+/* 右上：菜单 */
+.hero__menu {
+  grid-column: 2;
+  grid-row: 1;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.18em;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  align-self: start;
+  transition: color var(--duration-fast) var(--ease-out);
+}
+
+.hero__menu:hover {
+  color: var(--color-text-primary);
+}
+
+/* 主区：名字 + 定位 */
+.hero__main {
+  grid-column: 1;
+  grid-row: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1.5rem;
+  max-width: 600px;
+  padding-top: 2vh;
+}
+
+/* 名字块：宽度由「徐韩逸」决定，标题撑满到同宽 */
+.hero__name-block {
+  width: fit-content;
+}
+
+.hero__name-cn {
+  font-family: var(--font-cn);
+  font-size: clamp(3.5rem, 6.5vw, 6rem);
+  font-weight: 700;
+  line-height: 0.95;
+  letter-spacing: 0.02em;
+}
+
+.hero__title {
+  font-family: var(--font-serif);
+  font-size: clamp(1.5rem, 2.2vw, 2rem);
+  font-weight: 600;
+  line-height: 1.4;
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 标题每行两端对齐撑满到名字块的宽度 */
+.hero__title-line {
+  display: block;
+  width: 100%;
+  text-align: justify;
+  text-align-last: justify;
+}
+
+/* 最后一行带光标：光标不参与撑满计算 */
+.hero__title-line--last {
+  position: relative;
+}
+
+.hero__name-en {
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 2.5vw, 2.25rem);
+  font-style: italic;
+  font-weight: 400;
+  color: var(--color-text-secondary);
+  margin-top: 0.25rem;
+}
+
+.hero__cursor {
+  color: var(--color-accent-rose);
+  font-weight: 400;
+  animation: blink 1.2s step-end infinite;
+  text-shadow:
+    0 0 6px rgba(196, 72, 91, 0.9),
+    0 0 14px rgba(196, 72, 91, 0.7),
+    0 0 26px rgba(196, 72, 91, 0.45);
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* 左上角 tagline 后面的闪烁红下划线 */
+.hero__brand-cursor {
+  display: inline-block;
+  width: 1.4rem;
+  height: 2px;
+  background: var(--color-accent-rose);
+  box-shadow:
+    0 0 5px rgba(196, 72, 91, 0.9),
+    0 0 12px rgba(196, 72, 91, 0.6);
+  animation: blink 1.2s step-end infinite;
+}
+
+.hero__skills {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--color-text-secondary);
+  letter-spacing: 0.08em;
+}
+
+.hero__cta {
+  margin-top: 1.5rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 1.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 400;
+  letter-spacing: 0.2em;
+  color: var(--color-text-primary);
+  width: fit-content;
+  position: relative;
+  padding-bottom: 0.6rem;
+}
+
+.hero__cta::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: var(--color-text-secondary);
+  transition: background var(--duration-fast) var(--ease-out);
+}
+
+.hero__cta:hover::after {
+  background: var(--color-accent-rose);
+}
+
+.hero__cta-arrow {
+  transition: transform var(--duration-normal) var(--ease-out);
+}
+
+.hero__cta:hover .hero__cta-arrow {
+  transform: translateX(6px);
+}
+
+/* 右侧：导航锚点 */
+.hero__nav {
+  grid-column: 2;
+  grid-row: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1.1rem;
+  text-align: right;
+}
+
+.hero__nav-item {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.6rem;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  transition: color var(--duration-fast) var(--ease-out);
+}
+
+.hero__nav-id {
+  color: var(--color-text-secondary);
+}
+
+.hero__nav-item:hover {
+  color: var(--color-text-primary);
+}
+
+.hero__nav-item--active {
+  color: var(--color-text-primary);
+  position: relative;
+}
+
+.hero__nav-item--active::before {
+  content: '';
+  position: absolute;
+  right: calc(100% + 0.8rem);
+  top: 50%;
+  width: 1.8rem;
+  height: 1px;
+  background: var(--color-accent-rose);
+  transform: translateY(-50%);
+}
+
+/* 右下：坐标 */
+.hero__coords {
+  grid-column: 2;
+  grid-row: 3;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--color-text-muted);
+  letter-spacing: 0.1em;
+  text-align: right;
+  align-self: end;
+}
+
+/* === 响应式 === */
+@media (max-width: 768px) {
+  .hero__content {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr auto;
+  }
+
+  .hero__menu {
+    grid-column: 1;
+    justify-self: end;
+  }
+
+  .hero__main {
+    padding-top: 0;
+  }
+
+  .hero__nav {
+    grid-column: 1;
+    grid-row: 3;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: flex-start;
+    text-align: left;
+  }
+
+  .hero__nav-item--active::before {
+    display: none;
+  }
+
+  .hero__coords {
+    display: none;
+  }
+}
