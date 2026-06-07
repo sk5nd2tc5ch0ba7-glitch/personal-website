@@ -4,8 +4,8 @@ import { useGSAP } from '@gsap/react'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import styles from './SelectedWorks.module.css'
 import workGarden from '../../../assets/images/01-garden-remembers.png'
-import work02 from '../../../assets/images/02.png'
-import work03 from '../../../assets/images/03.png'
+import work02 from '../../../assets/images/02.webp'
+import work03 from '../../../assets/images/03.webp'
 import work04 from '../../../assets/images/9.jpg'
 
 gsap.registerPlugin(ScrollTrigger)

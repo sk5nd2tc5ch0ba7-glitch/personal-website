@@ -25,7 +25,18 @@ function SmoothScroll() {
     gsap.ticker.add(raf)
     gsap.ticker.lagSmoothing(0)
 
+    // 大图异步加载会撑高页面，导致 ScrollTrigger 早先算出的触发点位置全部错位
+    // （表现：滚到某屏，本该"升起显现"的文字永远停在隐藏态）。
+    // 等 load 完成 + 兜底延时各刷新一次，让所有触发点按最终页面高度重算。
+    const refresh = () => ScrollTrigger.refresh()
+    window.addEventListener('load', refresh)
+    const t1 = window.setTimeout(refresh, 600)
+    const t2 = window.setTimeout(refresh, 1500)
+
     return () => {
+      window.removeEventListener('load', refresh)
+      clearTimeout(t1)
+      clearTimeout(t2)
       gsap.ticker.remove(raf)
       lenis.destroy()
     }

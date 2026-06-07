@@ -46,7 +46,12 @@
       "Read(//c/Users/徐韩逸/.claude/**)",
       "Bash(git init *)",
       "Bash(git add *)",
-      "Bash(git commit *)"
+      "Bash(git commit *)",
+      "Bash(cd \"c:/Users/徐韩逸\" && echo \"=== 全盘找找还有没有别处的 02.png / 03.png 原图 ===\" && find . -maxdepth 4 \\\\\\( -name \"02.png\" -o -name \"03.png\" -o -name \"fe2ac*.png\" \\\\\\) 2>/dev/null | head -20; echo \"--- 项目 assets 现状 ---\"; ls -la \"personal-website/assets/images/\" 2>/dev/null | grep -iE \"02|03|3\\\\.|fe2ac|garden\" )",
+      "Read(//c/Users/徐韩逸/**)",
+      "Bash(grep -E \"^0?4\\\\.\\(jpg|png|webp\\)$\")",
+      "Bash(cd \"c:/Users/徐韩逸/personal-website/assets/images\" && echo \"=== 现存全部文件 ===\" && ls -1 && echo \"\" && echo \"=== 代码里引用的全部图片 ===\" && grep -rho \"images/[^']*\" ../../src/components/*/*.tsx | sort -u)",
+      "Read(//c/Users/src/**)"
     ]
   }
 }

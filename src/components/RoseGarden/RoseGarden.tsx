@@ -7,10 +7,10 @@ import gardenBg from '../../../assets/images/1a8b937fd7e3b4419e40b1c1bd51878.jpg
 import photo1 from '../../../assets/images/1.jpg'
 import photo2 from '../../../assets/images/2.jpg'
 import photo3 from '../../../assets/images/3.png'
-import photo4 from '../../../assets/images/04.jpg'
+import photo4 from '../../../assets/images/4.jpg'
 import photo5 from '../../../assets/images/5.jpg'
 import photo6 from '../../../assets/images/6.jpg'
-import photo7 from '../../../assets/images/7.jpg'
+import photo7 from '../../../assets/images/10.jpg'
 import photo8 from '../../../assets/images/8.jpg'
 
 gsap.registerPlugin(ScrollTrigger)
@@ -105,17 +105,21 @@ function RoseGarden() {
       // 想某段更慢 → 调大该段 duration；整体更慢 → 调高 .garden 的 height。
       if (bgRef.current) {
         const bg = bgRef.current
-        const seg = (from: number, to: number, at: number, dur: number, ease: string) =>
-          tl.fromTo(
+        // 显式锁定起点。关键：用 .to() 链而非多个 fromTo —— fromTo 默认 immediateRender，
+        // 4 段创建时会各自把底图瞬间设到自己的起点，最后一段(起点90%)获胜，导致页面一加载
+        // 底图就被拍到底部，首次下滑时被 scrub 猛拉回顶部 → 闪一张图 + 卡顿。
+        // .to() 不会预渲染起点，每段从上一段终点接着走，运动完全一致且无闪。
+        gsap.set(bg, { objectPosition: 'center 0%' })
+        const seg = (to: number, at: number, dur: number, ease: string) =>
+          tl.to(
             bg,
-            { objectPosition: `center ${from}%` },
             { objectPosition: `center ${to}%`, ease, duration: dur },
             at
           )
-        seg(0, 35, 0, 0.4, 'none') //   前段白底：匀速慢
-        seg(35, 70, 0.4, 0.46, 'none') // 慢速
-        seg(70, 90, 0.86, 0.52, 'power1.out') // 好看区：最慢，减速到近乎停住
-        seg(90, 100, 1.38, 0.12, 'power1.in') // 结尾：加速掠过
+        seg(35, 0, 0.4, 'none') //   前段白底：匀速慢
+        seg(70, 0.4, 0.46, 'none') // 慢速
+        seg(90, 0.86, 0.52, 'power1.out') // 好看区：最慢，减速到近乎停住
+        seg(100, 1.38, 0.12, 'power1.in') // 结尾：加速掠过
       }
 
       // 先把所有照片立刻锁到隐藏起点，避免滚到 dropAt 前先以原位露脸（闪一下）
