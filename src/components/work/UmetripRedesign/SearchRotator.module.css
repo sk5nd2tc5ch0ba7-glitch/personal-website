@@ -1,0 +1,106 @@
+/* 搜索框提示文案轮播 —— 纯 CSS 垂直轮播，自动循环。
+ * 一行窗口里，提示文案一条条往上滚动切换，到底无缝回到第一条。
+ * 呼应航旅纵横首页那个「搜索框提示轮播」的小动作，真跑在网页里。 */
+
+.wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.4rem;
+}
+
+/* 搜索框本体：白底圆角，跟真实 app 的搜索条一致 */
+.bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: min(320px, 80vw);
+  height: 46px;
+  padding: 0 16px;
+  border-radius: 23px;
+  background: #ffffff;
+  box-shadow: 0 6px 20px rgba(30, 110, 210, 0.12);
+}
+
+/* 放大镜图标 */
+.icon {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  color: rgba(30, 122, 254, 0.65);
+}
+
+.icon svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* 轮播窗口：只露一行高，溢出裁掉 = 上下只看见当前那条 */
+.window {
+  position: relative;
+  flex: 1;
+  height: 22px;
+  overflow: hidden;
+}
+
+/* 文案轨道：竖向堆叠所有提示，靠 translateY 逐条上推 */
+.track {
+  display: flex;
+  flex-direction: column;
+  animation: rotate 10s cubic-bezier(0.7, 0, 0.3, 1) infinite;
+}
+
+/* 每条提示固定一行高，跟 window 对齐 */
+.item {
+  height: 22px;
+  line-height: 22px;
+  font-family: var(--font-cn);
+  font-size: 14px;
+  color: rgba(26, 26, 26, 0.4);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* 4 条提示循环：每条停留 ~2s，切换 ~0.5s，到第 5 条（=复制的第 1 条）瞬回顶部无缝。
+ * 行高 22px，依次 0 → -22 → -44 → -66 → -88。 */
+@keyframes rotate {
+  0%, 20% {
+    transform: translateY(0);
+  }
+  25%, 45% {
+    transform: translateY(-22px);
+  }
+  50%, 70% {
+    transform: translateY(-44px);
+  }
+  75%, 95% {
+    transform: translateY(-66px);
+  }
+  100% {
+    transform: translateY(-88px);
+  }
+}
+
+.caption {
+  max-width: 30ch;
+  margin: 0;
+  text-align: center;
+  font-family: var(--font-cn);
+  font-size: 0.84rem;
+  line-height: 1.7;
+  color: var(--color-text-secondary);
+}
+
+.caption strong {
+  color: var(--color-accent-warm);
+  font-weight: 600;
+}
+
+/* 尊重「减少动态」偏好：停在第一条 */
+@media (prefers-reduced-motion: reduce) {
+  .track {
+    animation: none;
+  }
+}

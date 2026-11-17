@@ -4,14 +4,6 @@ import { useGSAP } from '@gsap/react'
 import styles from './Hero.module.css'
 import heroBg from '../../../assets/images/fe2ac777dd0c9a415f7bf70e2e6fb22.png'
 
-const navItems = [
-  { id: '01', label: 'HOME', active: true },
-  { id: '02', label: 'WORKS' },
-  { id: '03', label: 'ARCHIVE' },
-  { id: '04', label: 'NOTES' },
-  { id: '05', label: 'CONTACT' },
-]
-
 function Hero() {
   const rootRef = useRef<HTMLElement>(null)
 
@@ -57,18 +49,13 @@ function Hero() {
           '-=0.6'
         )
         .from(`.${styles.hero__cta}`, { y: 16, opacity: 0 }, '-=0.5')
-        .from(
-          `.${styles['hero__nav-item']}`,
-          { x: 24, opacity: 0, stagger: 0.1 },
-          '-=0.9'
-        )
         .from(`.${styles.hero__coords}`, { opacity: 0, duration: 0.8 }, '-=0.4')
     },
     { scope: rootRef }
   )
 
   return (
-    <section className={styles.hero} ref={rootRef}>
+    <section className={styles.hero} id="hero" ref={rootRef}>
       <div className={styles.hero__bg}>
         <img src={heroBg} alt="" />
       </div>
@@ -89,6 +76,11 @@ function Hero() {
         {/* 主区 */}
         <div className={styles.hero__main}>
           <div className={styles['hero__name-block']}>
+            <span className={styles.hero__hello}>
+              <span className={styles['hero__hello-prompt']}>&gt;</span>
+              <span className={styles['hero__hello-text']}>hello, world</span>
+              <span className={styles['hero__hello-caret']} />
+            </span>
             <h1 className={styles['hero__name-cn']}>徐韩逸</h1>
             <p className={styles['hero__name-en']}>/ Evelyn Xu</p>
 
@@ -112,20 +104,6 @@ function Hero() {
           </a>
         </div>
 
-        {/* 右侧导航 */}
-        <nav className={styles.hero__nav}>
-          {navItems.map((item) => (
-            <span
-              key={item.id}
-              className={`${styles['hero__nav-item']} ${
-                item.active ? styles['hero__nav-item--active'] : ''
-              }`}
-            >
-              <span className={styles['hero__nav-id']}>{item.id}</span>
-              <span className={styles['hero__nav-label']}>{item.label}</span>
-            </span>
-          ))}
-        </nav>
 
         {/* 右下坐标 */}
         <span className={styles.hero__coords}>

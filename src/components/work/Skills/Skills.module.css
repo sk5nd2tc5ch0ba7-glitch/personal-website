@@ -1,0 +1,158 @@
+/* Skills 详情页：简介 + 时间线 + CTA */
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(3rem, 8vh, 5rem);
+  margin-bottom: clamp(3rem, 7vh, 5rem);
+}
+
+/* === 简介 === */
+.intro {
+  max-width: 64ch;
+}
+
+.introTitle {
+  margin: 0 0 1.5rem;
+  font-family: var(--font-cn);
+  font-size: clamp(1.4rem, 2.5vw, 2rem);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.introText {
+  margin: 0 0 1rem;
+  font-family: var(--font-cn);
+  font-size: clamp(0.9rem, 1.2vw, 1.05rem);
+  line-height: 1.9;
+  color: var(--color-text-secondary);
+}
+
+.introHighlight {
+  margin: 0.5rem 0 0;
+  font-family: var(--font-cn);
+  font-size: clamp(0.95rem, 1.3vw, 1.1rem);
+  line-height: 1.8;
+  color: var(--color-text-primary);
+  font-weight: 600;
+}
+
+/* === 时间线标题 === */
+.timelineTitle {
+  margin: 0;
+  font-family: var(--font-cn);
+  font-size: clamp(1.2rem, 2vw, 1.6rem);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+/* === 时间线 === */
+.timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  position: relative;
+  padding-left: 3.5rem;
+}
+
+/* 左侧竖线 */
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 1.1rem;
+  top: 0.5rem;
+  bottom: 0.5rem;
+  width: 1px;
+  background: var(--color-border);
+}
+
+/* === 单个阶段 === */
+.stage {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.5rem;
+  padding: 1.5rem 0;
+  position: relative;
+}
+
+/* 阶段编号圆点 */
+.stageNo {
+  position: absolute;
+  left: -3.5rem;
+  top: 1.5rem;
+  width: 2.2rem;
+  height: 2.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: var(--color-bg-dark);
+  background: var(--color-accent-warm);
+  border-radius: 50%;
+  z-index: 1;
+}
+
+.stageContent {
+  flex: 1;
+}
+
+.stageName {
+  margin: 0 0 0.5rem;
+  font-family: var(--font-cn);
+  font-size: clamp(1rem, 1.5vw, 1.2rem);
+  font-weight: 600;
+  line-height: 1.3;
+  display: flex;
+  align-items: baseline;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+}
+
+.stageEn {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  font-weight: 400;
+}
+
+.stageDesc {
+  margin: 0;
+  font-family: var(--font-cn);
+  font-size: clamp(0.85rem, 1.1vw, 0.95rem);
+  line-height: 1.8;
+  color: var(--color-text-secondary);
+}
+
+/* === GitHub CTA === */
+.cta {
+  display: flex;
+  justify-content: center;
+  padding-top: 1rem;
+}
+
+.ctaBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem 2.5rem;
+  font-family: var(--font-cn);
+  font-size: clamp(0.9rem, 1.1vw, 1rem);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--color-text-primary);
+  text-decoration: none;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  transition: all 0.35s var(--ease-out);
+}
+
+.ctaBtn:hover {
+  border-color: var(--color-accent-warm);
+  color: var(--color-accent-warm);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(212, 136, 106, 0.15);
+}

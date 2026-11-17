@@ -244,6 +244,12 @@
   text-indent: 0.14em;
 }
 
+/* 中文逐字「生长」：每个字独立 inline-block，才能各自位移/缩放/模糊 */
+.outro__char {
+  display: inline-block;
+  will-change: transform, opacity, filter;
+}
+
 .outro__en {
   position: relative;
   z-index: 2;

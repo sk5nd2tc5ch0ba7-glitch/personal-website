@@ -1,0 +1,312 @@
+/* 飞机按钮（机票核心入口）动态强化 —— 循环自动播放的 web coding 动效。
+ * 一帧帧：静止 → 角标轻弹 → 微微上扬启动 → 加速滑离+速度线 → 淡入复位，无限循环。
+ * 矢量飞机独立于卡片，所以能飞出卡片框（stage 裁切即「飞出画面」）。 */
+
+.wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.4rem;
+}
+
+/* 舞台：透明，只当裁切容器——飞机飞出边界被裁掉 = 飞离画面。
+   不再套蓝天框，画面里只剩真实的白 app 卡 + 飞机。 */
+.stage {
+  position: relative;
+  width: 220px;
+  height: 220px;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+
+/* 白色 app 图标卡 */
+.card {
+  position: relative;
+  width: 112px;
+  height: 112px;
+  border-radius: 24px;
+  background: #ffffff;
+  box-shadow: 0 8px 24px rgba(30, 110, 210, 0.16);
+  display: grid;
+  place-items: center;
+}
+
+/* 向外扩散的淡蓝波纹（像雷达/水波），呼应「这里有动静，看过来」。
+   独立一层，放在白卡「前面」（DOM 在前=渲染在下层），跟白卡同尺寸同圆角，
+   从卡片轮廓往外扩；中心被白卡盖住，只露出超出卡片的那几圈 = 外边框在动。
+   两圈错开半个周期，连续往外推不留空档。 */
+.ripples {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 112px;
+  height: 112px;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.ripple {
+  position: absolute;
+  inset: 0;
+  border-radius: 28px;
+  /* 淡蓝粗边 + blur 晕染成柔光环，不是实心描边线；低透明度更弥散 */
+  border: 5px solid rgba(30, 122, 254, 0.32);
+  filter: blur(5px);
+  animation: cardRipple 3.2s ease-out infinite;
+}
+
+.ripple:nth-child(2) {
+  animation-delay: 1.6s;
+}
+
+/* 「官方直销」红角标，随循环轻弹一下 */
+.badge {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  padding: 2px 7px;
+  border-radius: 8px 8px 8px 2px;
+  background: #f5453d;
+  color: #fff;
+  font-family: var(--font-cn);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  transform-origin: top left;
+  animation: badgePop 3.2s ease-in-out infinite;
+}
+
+/* 矢量飞机：放在卡片中央，靠 transform 完成「上扬→加速滑离→复位」 */
+.plane {
+  width: 60px;
+  height: 60px;
+  color: #1e7afe;
+  transform-origin: center;
+  /* 总轨道用 linear，让每段在关键帧里各自定义缓动（蓄力柔、冲出加速） */
+  animation: planeFly 3.2s linear infinite;
+  will-change: transform, opacity;
+}
+
+.plane svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  /* 客机机身基础朝上，转 45° 让机头指向右上（飞离方向） */
+  transform: rotate(45deg);
+  filter: drop-shadow(0 3px 6px rgba(30, 122, 254, 0.35));
+}
+
+/* 内层：待机时轻轻上下浮，让飞机即使「停着」也有呼吸感。
+   跟外层 .plane 的飞行位移是两层 transform，互不打架。 */
+.planeInner {
+  display: block;
+  width: 100%;
+  height: 100%;
+  animation: planeBob 2s ease-in-out infinite;
+}
+
+/* 机尾拖尾：从机心往机尾方向（左下）拉一条渐隐尾迹，
+   挂在 .plane 上所以跟着飞机的位移/旋转一起走，比独立速度线更跟手。 */
+.tail {
+  position: absolute;
+  top: 50%;
+  right: 50%;
+  width: 64px;
+  height: 5px;
+  border-radius: 3px;
+  /* 近机身端浓、远端透明 */
+  background: linear-gradient(90deg, transparent, rgba(30, 122, 254, 0.7));
+  transform-origin: right center;
+  /* -45° 让尾迹顺着机尾方向（左下），跟机头右上同一条线 */
+  transform: rotate(-45deg) scaleX(0);
+  opacity: 0;
+  animation: tailDash 3.2s linear infinite;
+}
+
+/* 速度线：飞机加速段才显形，沿右上方向拖三条 */
+.streaks {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.streak {
+  position: absolute;
+  height: 3px;
+  border-radius: 3px;
+  background: linear-gradient(90deg, transparent, rgba(30, 122, 254, 0.85));
+  opacity: 0;
+  transform-origin: right center;
+  /* 斜 -45° 对齐飞机滑离方向（正右上，跟机头一致） */
+  transform: rotate(-45deg);
+  animation: streakDash 3.2s ease-out infinite;
+}
+
+.streak:nth-child(1) {
+  top: 40%;
+  right: 44%;
+  width: 84px;
+}
+.streak:nth-child(2) {
+  top: 50%;
+  right: 42%;
+  width: 110px;
+  animation-delay: 0.06s;
+}
+.streak:nth-child(3) {
+  top: 60%;
+  right: 46%;
+  width: 68px;
+  animation-delay: 0.12s;
+}
+
+/* === 关键帧：3.2s 一轮 ===
+ * 0–26%   静止（让人看清是机票入口）
+ * 26–36%  往机尾方向微退蓄力（像起跑下蹲），柔和到位
+ * 36–60%  顺机头 45° 强加速冲出 + 速度线
+ * 60%     完全飞出（不可见）
+ * 60–82%  瞬移回原位后淡入复位，准备下一轮
+ */
+@keyframes planeFly {
+  0%, 26% {
+    transform: translate(0, 0) rotate(0deg) scale(1);
+    opacity: 1;
+    /* 蓄力段：柔和地退到位，像下蹲的缓冲 */
+    animation-timing-function: cubic-bezier(0.34, 1.2, 0.64, 1);
+  }
+  /* 蓄力：往机尾方向（左下）微退一点，机头略压，像起跑前下蹲 */
+  36% {
+    transform: translate(-12px, 10px) rotate(6deg) scale(0.95);
+    opacity: 1;
+    /* 冲出段：强加速，越飞越快 */
+    animation-timing-function: cubic-bezier(0.6, 0, 0.85, 0);
+  }
+  /* 冲出：顺着机头方向（右上 45°）加速飞离，机头只轻微上扬，不乱转 */
+  60% {
+    transform: translate(155px, -155px) rotate(-8deg) scale(0.7);
+    opacity: 0;
+  }
+  60.01%, 70% {
+    /* 瞬移回原位（此刻不可见），再淡入 */
+    transform: translate(0, 0) rotate(0deg) scale(1);
+    opacity: 0;
+  }
+  82%, 100% {
+    transform: translate(0, 0) rotate(0deg) scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes streakDash {
+  0%, 40% {
+    opacity: 0;
+    transform: rotate(-45deg) scaleX(0.2);
+  }
+  50% {
+    opacity: 0.9;
+    transform: rotate(-45deg) scaleX(1);
+  }
+  62% {
+    opacity: 0;
+    transform: rotate(-45deg) scaleX(1);
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/* 待机微浮：上下浮 + 轻摇，让停着的飞机也有生气、抓得住眼。
+   只在静止段看得到——冲出后外层位移会盖过这层浮动。 */
+@keyframes planeBob {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-6px) rotate(-3deg);
+  }
+}
+
+/* 拖尾：跟速度线同节奏，在冲出段从机尾拉出再随飞机淡出。
+   挂在 .plane 上，所以会跟着飞机的位移/旋转一起飞走。 */
+@keyframes tailDash {
+  0%, 34% {
+    opacity: 0;
+    transform: rotate(-45deg) scaleX(0);
+  }
+  44% {
+    opacity: 0.85;
+    transform: rotate(-45deg) scaleX(1);
+  }
+  58% {
+    opacity: 0;
+    transform: rotate(-45deg) scaleX(1);
+  }
+  100% {
+    opacity: 0;
+    transform: rotate(-45deg) scaleX(0);
+  }
+}
+
+@keyframes badgePop {
+  0%, 22% {
+    transform: scale(1) rotate(0deg);
+  }
+  28% {
+    transform: scale(1.18) rotate(-4deg);
+  }
+  34% {
+    transform: scale(1) rotate(0deg);
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+/* 卡片波纹：从白卡边缘往外一圈圈淡蓝扩散，像雷达/水波，呼应「吸引注意力」。
+   幅度控制在 stage 范围内（112→×1.5≈168 < 220），不会被裁。 */
+@keyframes cardRipple {
+  0% {
+    transform: scale(1);
+    opacity: 0.55;
+  }
+  70% {
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+}
+
+/* 一句话说明：呼应你的设计意图，不是为动而动 */
+.caption {
+  max-width: 30ch;
+  margin: 0;
+  text-align: center;
+  font-family: var(--font-cn);
+  font-size: 0.84rem;
+  line-height: 1.7;
+  color: var(--color-text-secondary);
+}
+
+.caption strong {
+  color: var(--color-accent-warm);
+  font-weight: 600;
+}
+
+/* 尊重「减少动态」偏好：定格在静止帧 */
+@media (prefers-reduced-motion: reduce) {
+  .plane,
+  .planeInner,
+  .tail,
+  .streak,
+  .badge,
+  .ripple {
+    animation: none;
+  }
+  .streak,
+  .ripple {
+    opacity: 0;
+  }
+}

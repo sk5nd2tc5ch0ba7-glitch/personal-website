@@ -1,0 +1,238 @@
+/* === 入口隧道：滚动驱动连续帧序列 === */
+.tunnel {
+  position: relative;
+  width: 100%;
+  background: #000;
+}
+
+.tunnel__viewport {
+  position: relative;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+  background: #000;
+}
+
+.tunnel__canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  z-index: 0;
+  background: #000;
+}
+
+/* 暗罩：电影感 + 保证文字可读。四角压暗、中间通透 */
+.tunnel__overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    radial-gradient(130% 100% at 50% 50%, transparent 45%, rgba(0, 0, 0, 0.55) 100%),
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.5) 0%, transparent 22%, transparent 68%, rgba(0, 0, 0, 0.7) 100%);
+}
+
+/* === 开头暗场引子：碎片走完→进入旅程的过渡句 === */
+.tunnel__lead {
+  position: absolute;
+  z-index: 4;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  text-align: center;
+  padding: 0 1.5rem;
+  pointer-events: none;
+  transition: opacity 0.8s var(--ease-out);
+}
+
+.tunnel__leadCn {
+  font-family: var(--font-serif);
+  font-size: clamp(1.2rem, 3vw, 2.2rem);
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  color: #fff;
+  text-shadow: 0 2px 30px rgba(0, 0, 0, 0.7);
+}
+
+.tunnel__leadEn {
+  font-family: var(--font-mono);
+  font-size: clamp(0.6rem, 0.9vw, 0.74rem);
+  letter-spacing: 0.3em;
+  color: var(--color-accent-warm);
+}
+
+/* === 顶部：品牌 + 坐标，极小字、宽字距 === */
+.tunnel__top {
+  position: absolute;
+  z-index: 3;
+  top: clamp(1.5rem, 3.5vw, 2.6rem);
+  left: clamp(1.5rem, 4vw, 4rem);
+  right: clamp(1.5rem, 4vw, 4rem);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  pointer-events: none;
+}
+
+.tunnel__brand,
+.tunnel__coord {
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.32em;
+  color: var(--color-text-secondary);
+  text-transform: uppercase;
+}
+
+.tunnel__coord {
+  color: var(--color-text-muted);
+  letter-spacing: 0.18em;
+}
+
+/* === 居中字幕 === */
+.tunnel__caption {
+  position: absolute;
+  z-index: 3;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  padding: 0 1.5rem;
+}
+
+/* 每段叠放，靠 class 切换显隐 */
+.cap {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.1rem;
+  text-align: center;
+  opacity: 0;
+  transform: translateY(28px);
+  filter: blur(6px);
+  transition:
+    opacity 0.9s var(--ease-out),
+    transform 0.9s var(--ease-out),
+    filter 0.9s var(--ease-out);
+}
+
+.cap--on {
+  opacity: 1;
+  transform: translateY(0);
+  filter: blur(0);
+}
+
+.cap__id {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.4em;
+  color: var(--color-accent-warm);
+  padding-left: 0.4em;
+}
+
+.cap__title {
+  font-family: var(--font-cn);
+  font-size: clamp(2.4rem, 5.5vw, 4.4rem);
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: 0.24em;
+  color: #fff;
+  text-shadow: 0 2px 40px rgba(0, 0, 0, 0.5);
+}
+
+.cap__sub {
+  font-family: var(--font-mono);
+  font-size: clamp(0.7rem, 1.1vw, 0.82rem);
+  letter-spacing: 0.18em;
+  color: var(--color-text-secondary);
+}
+
+/* === 右侧竖向进度 === */
+.tunnel__rail {
+  position: absolute;
+  z-index: 3;
+  right: clamp(1.5rem, 4vw, 4rem);
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  pointer-events: none;
+}
+
+.tunnel__railNum {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  letter-spacing: 0.1em;
+  color: #fff;
+}
+
+.tunnel__railTotal {
+  color: var(--color-text-muted);
+}
+
+.tunnel__railTrack {
+  position: relative;
+  width: 1px;
+  height: clamp(80px, 16vh, 160px);
+  background: rgba(255, 255, 255, 0.18);
+  overflow: hidden;
+}
+
+.tunnel__railFill {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    var(--color-accent-warm),
+    var(--color-accent-rose)
+  );
+  transform-origin: top center;
+  will-change: transform;
+}
+
+/* === 底部滚动提示 === */
+.tunnel__hint {
+  position: absolute;
+  z-index: 3;
+  left: 50%;
+  bottom: clamp(1.5rem, 4vw, 3rem);
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  pointer-events: none;
+}
+
+.tunnel__hintText {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.34em;
+  color: var(--color-text-secondary);
+}
+
+.tunnel__hintArrow {
+  font-size: 0.9rem;
+  color: var(--color-accent-warm);
+  animation: hintBob 1.8s var(--ease-out) infinite;
+}
+
+@keyframes hintBob {
+  0%, 100% { transform: translateY(0); opacity: 0.5; }
+  50% { transform: translateY(5px); opacity: 1; }
+}
+
+/* === 响应式 === */
+@media (max-width: 768px) {
+  .tunnel__rail { display: none; }
+  .cap__title { font-size: clamp(1.8rem, 8vw, 2.8rem); }
+}

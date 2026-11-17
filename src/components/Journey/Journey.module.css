@@ -1,4 +1,4 @@
-/* === 03 ABOUT：个人介绍，深色整页，editorial 排版 === */
+/* === 03 ABOUT：个人介绍，深色整页，左文右码两栏 === */
 .journey {
   position: relative;
   width: 100%;
@@ -27,190 +27,311 @@
   pointer-events: none;
 }
 
-/* 氛围底纹：超大幽灵字，几乎不可见，只制造空间纵深 */
+/* 氛围底纹：超大幽灵字 */
 .ghost {
   position: absolute;
-  top: clamp(2rem, 6vh, 6rem);
+  top: clamp(1rem, 4vh, 4rem);
   right: clamp(-2rem, -1vw, 0rem);
   z-index: 0;
   font-family: var(--font-display);
-  font-size: clamp(8rem, 32vw, 30rem);
+  font-size: clamp(7rem, 26vw, 26rem);
   font-weight: 700;
   line-height: 0.8;
   letter-spacing: -0.03em;
-  color: rgba(255, 255, 255, 0.018);
+  color: rgba(255, 255, 255, 0.02);
   user-select: none;
   pointer-events: none;
   will-change: transform;
 }
 
+/* 两栏容器 */
 .inner {
   position: relative;
   z-index: 2;
-  max-width: 1100px;
+  max-width: 1280px;
   margin: 0 auto;
+  display: grid;
+  grid-template-columns: 45fr 55fr;
+  gap: clamp(2.5rem, 6vw, 6rem);
+  align-items: start;
 }
 
-/* 章节索引 */
+/* === 左栏：文字 === */
+.colLeft {
+  min-width: 0;
+}
+
+.fade {
+  will-change: transform, opacity;
+}
+
 .index {
   display: block;
   font-family: var(--font-mono);
   font-size: var(--text-mono-sm);
   letter-spacing: 0.34em;
-  color: var(--color-text-muted);
-  margin-bottom: clamp(3rem, 8vh, 6rem);
-}
-
-/* === 遮罩擦除：外层裁切，内层升起 === */
-.reveal {
-  overflow: hidden;
-  display: block;
-}
-
-.reveal__inner {
-  display: block;
-  will-change: transform;
-}
-
-/* === 主标题区 === */
-.head {
-  margin-bottom: clamp(3rem, 8vh, 5.5rem);
-}
-
-.kicker {
-  font-family: var(--font-mono);
-  font-size: clamp(0.7rem, 1vw, 0.85rem);
-  letter-spacing: 0.4em;
   color: var(--color-accent-warm);
-  margin-bottom: clamp(1.2rem, 3vh, 2rem);
+  margin-bottom: clamp(1.6rem, 4vh, 2.6rem);
 }
 
-.name {
-  font-family: var(--font-display);
-  font-size: clamp(2.6rem, 7vw, 6rem);
+.lead {
+  margin: 0;
+  font-family: var(--font-cn);
+  font-size: clamp(1.5rem, 2.8vw, 2.4rem);
   font-weight: 600;
-  line-height: 1.05;
+  line-height: 1.55;
   letter-spacing: 0.02em;
   color: var(--color-text-primary);
 }
 
-.nameEn {
-  font-weight: 300;
-  color: var(--color-text-secondary);
-  letter-spacing: 0.01em;
+/* 标题逐行上浮：外层做 mask 裁切，内层位移 */
+.leadLine {
+  display: block;
+  overflow: hidden;
 }
 
-.role {
-  margin-top: clamp(0.8rem, 2vh, 1.4rem);
-  font-family: var(--font-cn);
-  font-size: clamp(1.1rem, 2.4vw, 2rem);
-  font-weight: 500;
-  letter-spacing: 0.06em;
-  color: var(--color-text-secondary);
+.leadInner {
+  display: block;
+  will-change: transform;
 }
 
-.roleAccent {
+.accent {
   color: var(--color-accent-rose);
-  font-weight: 600;
 }
 
 /* 强调红线 */
 .rule {
   display: block;
-  width: clamp(60px, 12vw, 140px);
+  width: clamp(56px, 10vw, 120px);
   height: 2px;
-  margin-top: clamp(1.6rem, 4vh, 2.6rem);
+  margin: clamp(1.6rem, 4vh, 2.4rem) 0;
   background: var(--color-accent-rose);
   transform-origin: left center;
 }
 
-/* === 正文叙事 === */
-.lede {
-  max-width: 680px;
-  margin-bottom: clamp(4rem, 10vh, 7rem);
-}
-
-.ledeLine {
+.para {
+  margin: 0 0 clamp(1.2rem, 3vh, 1.8rem);
   font-family: var(--font-cn);
-  font-size: clamp(1.15rem, 2.2vw, 1.8rem);
-  font-weight: 400;
-  line-height: 1.9;
-  letter-spacing: 0.04em;
-  color: var(--color-text-primary);
-}
-
-.ledeSub {
-  margin-top: clamp(1.6rem, 4vh, 2.6rem);
-  font-family: var(--font-mono);
-  font-size: clamp(0.72rem, 1vw, 0.9rem);
+  font-size: clamp(0.92rem, 1.15vw, 1.05rem);
   font-weight: 400;
   line-height: 2;
-  letter-spacing: 0.1em;
-  color: var(--color-text-muted);
+  letter-spacing: 0.02em;
+  color: var(--color-text-secondary);
 }
 
-/* === 信息网格 === */
-.meta {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: clamp(1.5rem, 4vw, 3.5rem);
-  padding-top: clamp(2.5rem, 6vh, 4rem);
-  border-top: 1px solid var(--color-border);
-}
-
-.metaCol {
+/* 三组关键词 */
+.tags {
+  margin: clamp(2rem, 5vh, 3rem) 0 0;
   display: flex;
   flex-direction: column;
+  gap: clamp(1.2rem, 3vh, 1.8rem);
 }
 
-.metaH {
-  font-family: var(--font-mono);
-  font-size: var(--text-mono-sm);
-  letter-spacing: 0.28em;
-  color: var(--color-text-muted);
-  margin-bottom: clamp(1rem, 2.5vh, 1.6rem);
+.tagGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  padding-left: 1rem;
+  border-left: 1px solid var(--color-border);
 }
 
-.metaMain {
-  font-family: var(--font-cn);
-  font-size: clamp(1rem, 1.5vw, 1.25rem);
+.tagH {
+  font-family: var(--font-display);
+  font-size: clamp(1rem, 1.4vw, 1.2rem);
   font-weight: 600;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.02em;
   color: var(--color-text-primary);
-  margin-bottom: 0.5rem;
 }
 
-.metaSub {
-  font-family: var(--font-cn);
-  font-size: clamp(0.82rem, 1.1vw, 0.98rem);
-  line-height: 1.7;
-  letter-spacing: 0.03em;
-  color: var(--color-text-secondary);
-  margin-bottom: 0.35rem;
-}
-
-/* mono 风格的英文/年份注脚行 */
-.metaSub:last-child {
+.tagL {
   font-family: var(--font-mono);
   font-size: clamp(0.66rem, 0.85vw, 0.78rem);
-  letter-spacing: 0.12em;
+  letter-spacing: 0.14em;
   color: var(--color-text-muted);
+}
+
+.outroLine {
+  margin: clamp(2.4rem, 6vh, 3.6rem) 0 0;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: clamp(0.95rem, 1.3vw, 1.2rem);
+  line-height: 1.7;
+  letter-spacing: 0.02em;
+  color: var(--color-text-secondary);
+}
+
+/* === 右栏：代码卡片 === */
+.colRight {
+  position: sticky;
+  top: clamp(8rem, 18vh, 12rem);
+  min-width: 0;
+}
+
+.codeCard {
+  border-radius: var(--radius-lg);
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid var(--color-border);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+  overflow: hidden;
+  will-change: transform, opacity;
+}
+
+/* 卡片顶栏：仿编辑器红绿灯 */
+.codeBar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.85rem 1.1rem;
+  border-bottom: 1px solid var(--color-border);
+  background: rgba(255, 255, 255, 0.015);
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.16);
+}
+
+.dot:first-child {
+  background: rgba(168, 58, 60, 0.55);
+}
+
+.codeName {
+  margin-left: 0.6rem;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.16em;
+  color: var(--color-text-muted);
+}
+
+.codeBody {
+  margin: 0;
+  padding: clamp(1.4rem, 3vw, 2.2rem);
+  font-family: var(--font-mono);
+  font-size: clamp(0.78rem, 1vw, 0.95rem);
+  line-height: 2;
+  letter-spacing: 0.02em;
+  color: var(--color-accent-warm);
+  white-space: pre-wrap;
+  word-break: break-word;
+  min-height: 22em;
+}
+
+/* 打字机光标 */
+.caret {
+  display: inline-block;
+  width: 0.55em;
+  height: 1.05em;
+  margin-left: 1px;
+  vertical-align: text-bottom;
+  background: var(--color-accent-rose);
+  opacity: 0.9;
+}
+
+.caretBlink {
+  animation: caretBlink 1s steps(1) infinite;
+}
+
+@keyframes caretBlink {
+  0%,
+  50% {
+    opacity: 0.9;
+  }
+  50.01%,
+  100% {
+    opacity: 0;
+  }
+}
+
+/* === 底部技能跑马灯（从右往左无缝滚动） === */
+.marquee {
+  position: relative;
+  z-index: 2;
+  margin-top: clamp(4rem, 10vh, 7rem);
+  padding: clamp(1.4rem, 3vh, 2rem) 0;
+  border-top: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
+  overflow: hidden;
+  /* 两端羽化淡出 */
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent,
+    #000 12%,
+    #000 88%,
+    transparent
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    #000 12%,
+    #000 88%,
+    transparent
+  );
+}
+
+.marqueeTrack {
+  display: flex;
+  width: max-content;
+  gap: clamp(2rem, 4vw, 3.5rem);
+  animation: marqueeScroll 38s linear infinite;
+  will-change: transform;
+}
+
+/* 复制了一份 SKILLS，滚动 -50% 即无缝衔接 */
+@keyframes marqueeScroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.chip {
+  flex: none;
+  font-family: var(--font-mono);
+  font-size: clamp(0.8rem, 1.1vw, 0.95rem);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+  transition: color var(--duration-fast) var(--ease-out);
+}
+
+.chip::before {
+  content: '◆';
+  margin-right: clamp(2rem, 4vw, 3.5rem);
+  font-size: 0.5em;
+  vertical-align: middle;
+  color: var(--color-accent-rose);
+  opacity: 0.5;
+}
+
+.marquee:hover .marqueeTrack {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marqueeTrack {
+    animation: none;
+  }
 }
 
 /* === 响应式 === */
-@media (max-width: 768px) {
-  .meta {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 2rem 1.5rem;
+@media (max-width: 900px) {
+  .inner {
+    grid-template-columns: 1fr;
+    gap: clamp(2.5rem, 8vh, 4rem);
+  }
+
+  .colRight {
+    position: relative;
+    top: auto;
   }
 
   .ghost {
-    font-size: 40vw;
-  }
-}
-
-@media (max-width: 480px) {
-  .meta {
-    grid-template-columns: 1fr;
+    font-size: 42vw;
   }
 }

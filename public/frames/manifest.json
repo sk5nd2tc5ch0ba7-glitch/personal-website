@@ -1,0 +1,20 @@
+{
+  "total": 330,
+  "segments": [
+    {
+      "src": "assets/videos/飞机新款.mp4",
+      "start": 1,
+      "end": 110
+    },
+    {
+      "src": "assets/videos/天使雕像开花.mp4",
+      "start": 111,
+      "end": 220
+    },
+    {
+      "src": "assets/videos/草原狼新款.mp4",
+      "start": 221,
+      "end": 330
+    }
+  ]
+}

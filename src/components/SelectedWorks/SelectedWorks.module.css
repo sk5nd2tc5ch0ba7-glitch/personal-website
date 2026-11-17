@@ -53,6 +53,9 @@
 }
 
 .work {
+  display: block;
+  text-decoration: none;
+  color: inherit;
   will-change: transform, opacity;
 }
 
@@ -138,18 +141,87 @@
   color: rgba(245, 243, 240, 0.6);
 }
 
-.work__arrow {
+.work__view {
   font-family: var(--font-mono);
-  font-size: 0.85rem;
+  font-size: 0.6rem;
+  letter-spacing: 0.18em;
+  white-space: nowrap;
   color: var(--color-accent-rose);
   transform: translateX(-4px);
   opacity: 0;
   transition: transform 0.45s var(--ease-out), opacity 0.45s var(--ease-out);
 }
 
-.work__media:hover .work__arrow {
+.work__media:hover .work__view {
   transform: translateX(0);
   opacity: 1;
+}
+
+/* === 隐藏档案入口：醒目卡片式，中文领衔，hover 透出红色 === */
+.archiveEntry {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.7rem;
+  margin: clamp(4rem, 10vh, 7rem) auto 0;
+  padding: clamp(1.8rem, 4vh, 2.8rem) clamp(2rem, 5vw, 3.5rem);
+  max-width: 640px;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  border: 1px solid rgba(43, 39, 35, 0.16);
+  border-radius: var(--radius-lg);
+  background: rgba(43, 39, 35, 0.015);
+  transition: border-color 0.5s var(--ease-out), background 0.5s var(--ease-out),
+    transform 0.5s var(--ease-out);
+}
+
+.archiveEntry:hover {
+  border-color: rgba(196, 72, 91, 0.5);
+  background: rgba(196, 72, 91, 0.04);
+  transform: translateY(-3px);
+}
+
+.archiveEntry__en {
+  font-family: var(--font-mono);
+  font-size: clamp(0.58rem, 0.8vw, 0.7rem);
+  letter-spacing: 0.3em;
+  color: rgba(43, 39, 35, 0.45);
+}
+
+.archiveEntry__cn {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: var(--font-cn);
+  font-size: clamp(1.1rem, 2vw, 1.5rem);
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  color: #2b2723;
+}
+
+.archiveEntry__arrow {
+  font-family: var(--font-mono);
+  color: var(--color-accent-rose);
+  transform: translateX(-4px);
+  transition: transform 0.45s var(--ease-out);
+}
+
+.archiveEntry:hover .archiveEntry__arrow {
+  transform: translateX(4px);
+}
+
+/* 提示语：常驻可见的红色小字，hover 更亮 */
+.archiveEntry__hint {
+  font-family: var(--font-mono);
+  font-size: clamp(0.6rem, 0.85vw, 0.72rem);
+  letter-spacing: 0.22em;
+  color: rgba(196, 72, 91, 0.7);
+  transition: color 0.45s var(--ease-out);
+}
+
+.archiveEntry:hover .archiveEntry__hint {
+  color: var(--color-accent-rose);
 }
 
 /* === 响应式 === */

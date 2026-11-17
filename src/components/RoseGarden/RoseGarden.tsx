@@ -72,13 +72,30 @@ function RoseGarden() {
         scrollTrigger: { trigger: rootRef.current, start: 'top 60%' },
       })
 
-      // outro 桥接文字：进视口淡入上浮
-      gsap.from(`.${styles.outro} > *`, {
-        y: 40,
+      // outro 中文：逐字「生长」——每个字从下方裁切区里往上长出来，
+      // 带轻微缩放和模糊，错峰展开，呼应「仍在生长」的语义
+      gsap.from(`.${styles.outro__char}`, {
+        yPercent: 110,
+        scale: 0.86,
+        filter: 'blur(6px)',
         autoAlpha: 0,
-        duration: 1.4,
-        stagger: 0.2,
+        duration: 1.1,
+        stagger: 0.09,
+        ease: 'power4.out',
+        immediateRender: false,
+        scrollTrigger: { trigger: outroRef.current, start: 'top 72%' },
+      })
+
+      // outro 英文：整体从模糊到清晰淡入，稍晚于中文
+      gsap.from(`.${styles.outro__en}`, {
+        autoAlpha: 0,
+        y: 18,
+        filter: 'blur(8px)',
+        letterSpacing: '0.9em',
+        duration: 1.6,
+        delay: 0.5,
         ease: 'power3.out',
+        immediateRender: false,
         scrollTrigger: { trigger: outroRef.current, start: 'top 72%' },
       })
 
@@ -386,8 +403,15 @@ function RoseGarden() {
     </section>
 
     {/* 纯白 outro：拉开大段留白，一句单独的桥接文字，把"花园"过渡到"我走过的路" */}
-    <section className={styles.outro} ref={outroRef}>
-      <p className={styles.outro__cn}>而我，仍在生长。</p>
+    <section className={styles.outro} id="outro" ref={outroRef}>
+      {/* 中文逐字"长"出来：每个字一个 span，GSAP 错峰从下往上生长 */}
+      <p className={styles.outro__cn} aria-label="而我，仍在生长。">
+        {'而我，仍在生长。'.split('').map((ch, i) => (
+          <span className={styles.outro__char} aria-hidden="true" key={i}>
+            {ch}
+          </span>
+        ))}
+      </p>
       <p className={styles.outro__en}>AND I AM STILL GROWING.</p>
     </section>
     </>

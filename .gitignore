@@ -26,3 +26,9 @@ pnpm-debug.log*
 
 # vite cache
 .vite/
+
+# non-site files
+portfolio-pdf/
+skill/
+skill.zip
+scripts/

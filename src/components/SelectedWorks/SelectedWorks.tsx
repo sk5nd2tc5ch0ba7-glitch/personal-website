@@ -1,48 +1,18 @@
 import { useRef } from 'react'
+import { Link } from 'react-router-dom'
 import { gsap } from 'gsap'
 import { useGSAP } from '@gsap/react'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import styles from './SelectedWorks.module.css'
-import workGarden from '../../../assets/images/01-garden-remembers.png'
-import work02 from '../../../assets/images/02.webp'
-import work03 from '../../../assets/images/03.webp'
-import work04 from '../../../assets/images/9.jpg'
+import { WORKS } from '../../data/works'
 
 gsap.registerPlugin(ScrollTrigger)
 
 /**
- * 精选作品（02 SELECTED WORKS）。
- * 纯展示 + hover 动效，暂不做路由跳转。
- * img 为 null 的项走渐变占位，待真图替换。
- * title / cat 沿用效果图文案。
+ * 作品入口（页面编号 03，承接 about 之后）。
+ * 四张图不再是「纯展示」，而是四个跳转入口 —— 点击进入 /work/:slug 详情页。
+ * 数据来自共享数据源 src/data/works.ts，加项只改那里、这里自动跟上。
  */
-const WORKS = [
-  {
-    img: workGarden,
-    no: '01',
-    title: 'THE GARDEN REMEMBERS',
-    cat: 'EXPERIENCE DESIGN',
-  },
-  {
-    img: work02,
-    no: '02',
-    title: 'PERSISTENCE',
-    cat: 'PRODUCT DESIGN',
-  },
-  {
-    img: work03,
-    no: '03',
-    title: 'THREADS OF CARE',
-    cat: 'SERVICE & SYSTEM DESIGN',
-  },
-  {
-    img: work04,
-    no: '04',
-    title: 'HIDDEN COLLAGE',
-    cat: 'VISUAL SYSTEM DESIGN',
-  },
-]
-
 function SelectedWorks() {
   const rootRef = useRef<HTMLElement>(null)
 
@@ -57,7 +27,7 @@ function SelectedWorks() {
         ease: 'power3.out',
         scrollTrigger: { trigger: rootRef.current, start: 'top 78%' },
       })
-      // 作品卡错落上浮
+      // 入口卡错落上浮
       gsap.from(`.${styles.work}`, {
         y: 56,
         autoAlpha: 0,
@@ -75,18 +45,23 @@ function SelectedWorks() {
       <div className={styles.works__inner}>
         {/* 左侧编号 + 标签 */}
         <div className={styles.works__head}>
-          <span className={styles.works__no}>02</span>
+          <span className={styles.works__no}>03</span>
           <span className={styles.works__label}>SELECTED WORKS</span>
           <span className={styles.works__rule} />
         </div>
 
-        {/* 四张作品 */}
+        {/* 四个入口：点击进入详情页 */}
         <div className={styles.works__grid}>
           {WORKS.map((w) => (
-            <article className={styles.work} key={w.no}>
+            <Link
+              className={styles.work}
+              key={w.slug}
+              to={`/work/${w.slug}`}
+              aria-label={`查看作品：${w.title}`}
+            >
               <div className={styles.work__media}>
-                {w.img ? (
-                  <img src={w.img} alt={w.title} />
+                {w.cover ? (
+                  <img src={w.cover} alt={w.title} />
                 ) : (
                   <span className={styles.work__placeholder}>{w.no}</span>
                 )}
@@ -94,13 +69,25 @@ function SelectedWorks() {
                   <h3 className={styles.work__title}>{w.title}</h3>
                   <div className={styles.work__foot}>
                     <span className={styles.work__cat}>{w.cat}</span>
-                    <span className={styles.work__arrow}>→</span>
+                    <span className={styles.work__view}>VIEW CASE →</span>
                   </div>
                 </div>
               </div>
-            </article>
+            </Link>
           ))}
         </div>
+
+        {/* 隐藏档案入口：明显一点，中文领衔，hover 还有红色暗示 */}
+        <Link to="/archive" className={styles.archiveEntry}>
+          <span className={styles.archiveEntry__en}>
+            NOT ALL WORKS ARE MEANT TO BE SEEN YET
+          </span>
+          <span className={styles.archiveEntry__cn}>
+            还有一些没准备好被看见的东西
+            <span className={styles.archiveEntry__arrow}>→</span>
+          </span>
+          <span className={styles.archiveEntry__hint}>进入隐藏档案 · HIDDEN ARCHIVE</span>
+        </Link>
       </div>
     </section>
   )

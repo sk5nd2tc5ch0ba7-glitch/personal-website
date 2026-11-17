@@ -1,0 +1,182 @@
+/* === 首屏 Loading：你好，世界 === */
+.loader {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-bg-hero);
+  overflow: hidden;
+  will-change: transform;
+}
+
+/* 极淡的暖色径向光晕，避免纯黑死板 */
+.loader::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 80vmax;
+  height: 80vmax;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(
+    circle,
+    rgba(196, 72, 91, 0.06) 0%,
+    transparent 60%
+  );
+  pointer-events: none;
+}
+
+.content {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(1.2rem, 3vh, 2rem);
+  padding: 0 1.5rem;
+}
+
+/* 代码行：终端风格 */
+.codeLine {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6em;
+  font-family: var(--font-mono);
+  font-size: clamp(1rem, 2.6vw, 1.7rem);
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+.prompt {
+  color: var(--color-accent-rose);
+  font-weight: 600;
+}
+
+.code {
+  color: rgba(255, 255, 255, 0.92);
+}
+
+/* 打字光标 */
+.caret {
+  display: inline-block;
+  width: 0.55em;
+  height: 1.05em;
+  margin-left: 1px;
+  vertical-align: text-bottom;
+  background: var(--color-accent-warm);
+  transform: translateY(0.12em);
+}
+
+.caretBlink {
+  animation: caretBlink 0.9s steps(1) infinite;
+}
+
+@keyframes caretBlink {
+  0%,
+  50% {
+    opacity: 1;
+  }
+  50.01%,
+  100% {
+    opacity: 0;
+  }
+}
+
+/* 输出行：中英问候，打完字后淡入上浮 */
+.output {
+  display: flex;
+  align-items: center;
+  gap: 0.7em;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.7s var(--ease-out), transform 0.7s var(--ease-out);
+}
+
+.outShow {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.outCn {
+  font-family: var(--font-serif);
+  font-size: clamp(1.1rem, 2.4vw, 1.6rem);
+  letter-spacing: 0.12em;
+  color: #fff;
+}
+
+.outDot {
+  color: var(--color-accent-rose);
+}
+
+.outEn {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: clamp(0.95rem, 2vw, 1.35rem);
+  letter-spacing: 0.04em;
+  color: var(--color-text-secondary);
+}
+
+/* 底部 meta 行 */
+.meta {
+  position: absolute;
+  bottom: clamp(2rem, 6vh, 3.5rem);
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.22em;
+  color: var(--color-text-muted);
+  white-space: nowrap;
+}
+
+.metaLoading::after {
+  content: '';
+  animation: dots 1.4s steps(4, end) infinite;
+}
+
+@keyframes dots {
+  0% {
+    content: '';
+  }
+  25% {
+    content: '.';
+  }
+  50% {
+    content: '..';
+  }
+  75% {
+    content: '...';
+  }
+}
+
+/* 底部进度线 */
+.barTrack {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.06);
+  overflow: hidden;
+}
+
+.bar {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    var(--color-accent-rose),
+    var(--color-accent-warm)
+  );
+}
+
+@media (max-width: 480px) {
+  .codeLine {
+    font-size: 1rem;
+  }
+}

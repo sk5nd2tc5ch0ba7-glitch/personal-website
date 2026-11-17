@@ -1,0 +1,45 @@
+/* 弹幕层：覆盖碎片区、不拦点击，飘在碎片之上、UI 之下。
+   absolute（不是 fixed）：限制在 .page 碎片区内，不跟随到后面的隧道。 */
+.layer {
+  position: absolute;
+  inset: 0;
+  z-index: 6;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.danmu {
+  position: absolute;
+  left: 100%;
+  white-space: nowrap;
+  font-family: var(--font-cn);
+  letter-spacing: 0.04em;
+  color: rgba(255, 255, 255, 0.55);
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.5);
+  will-change: transform;
+  animation-name: danmuFly;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+}
+
+/* 红色点缀的那几条：更亮、带一点辉光 */
+.red {
+  color: var(--color-accent-rose);
+  text-shadow: 0 0 12px rgba(196, 72, 91, 0.45);
+}
+
+/* 从右屏外飘到左屏外 */
+@keyframes danmuFly {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(calc(-100vw - 100%));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .danmu {
+    display: none;
+  }
+}

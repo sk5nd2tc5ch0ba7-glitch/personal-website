@@ -1,0 +1,71 @@
+/* 篇一正文：横版作品集页竖向叠。深色底，克制留白，节奏「标题 → 大图」。 */
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(4rem, 12vh, 8rem);
+  margin-bottom: clamp(3rem, 7vh, 5rem);
+}
+
+/* === 单张：一段过渡标题 + 一张横版图 === */
+.plate {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1.5rem, 4vh, 2.5rem);
+}
+
+.plateHead {
+  max-width: 60ch;
+}
+
+.plateNo {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: var(--text-caption);
+  letter-spacing: 0.3em;
+  color: var(--color-accent-warm);
+  margin-bottom: 0.9rem;
+}
+
+.plateTitle {
+  margin: 0 0 0.5rem;
+  font-family: var(--font-cn);
+  font-size: clamp(1.5rem, 3vw, 2.4rem);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: 0.01em;
+}
+
+.plateEn {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  margin-bottom: 1.1rem;
+}
+
+.plateNote {
+  margin: 0;
+  font-family: var(--font-cn);
+  font-size: clamp(0.9rem, 1.2vw, 1.02rem);
+  line-height: 1.85;
+  color: var(--color-text-secondary);
+}
+
+/* === 作品集图：宽度撑满，高度按原图比例自适应 === */
+.figure {
+  margin: 0;
+  width: 100%;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border);
+  background: #1a1a1a;
+  box-shadow: var(--shadow-soft);
+}
+
+.figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
